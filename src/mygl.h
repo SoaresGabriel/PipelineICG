@@ -3,12 +3,9 @@
 
 #include "math.h"
 #include "definitions.h"
-#include <eigen3/Eigen/Dense>
+#include "transformations.h"
 
 #define OBJ "monkey_head2.obj"
-
-typedef Eigen::Matrix<float, 4, 4> Matrix4f;
-typedef Eigen::Matrix<float, 4, 1> Vector4f;
 
 typedef struct Color {
 	unsigned char R;
