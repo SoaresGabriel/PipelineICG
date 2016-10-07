@@ -31,9 +31,10 @@
 <h3>
 <a id="espaço-homogêneo" class="anchor" href="#espa%C3%A7o-homog%C3%AAneo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Espaço Homogêneo</h3>
 
-<p>Faremos uso do Espaço Homogêneo nesse trabalho, veremos que ele possibilita a resolução de alguns problemas relacionado as transformações. Podemos derivar um Espaço Homogêneo, adicionando uma coordenada 'w' a pontos do espaço Euclidiano, chamamos essa de Coordenada Homogênea, dessa forma, um ponto no Espaço Euclidiano tem infinitos representantes no Espaço Homogêneo da seguinte forma:
-<code>[Euclidiano] (x, y, z) ⇒ (x/w, y/w, z/w, w) [Homogêneo]</code>
-Dessa forma nesse trabalho, representaremos os vértices dos objetos, como pontos no espaço homogêneo, e usaremos inicialmente 'w=1' para simplificar, desse forma: <a href="x,%20y,%20z">Euclidiano</a> ⇒ (x, y, z, 1) [Homogêneo]</p>
+<p>Faremos uso do Espaço Homogêneo nesse trabalho, veremos que ele possibilita a resolução de alguns problemas relacionado as transformações. Podemos derivar um Espaço Homogêneo, adicionando uma coordenada 'W' a pontos do espaço Euclidiano, chamamos essa de Coordenada Homogênea, dessa forma, um ponto no Espaço Euclidiano tem infinitos representantes no Espaço Homogêneo da seguinte forma:
+<code>[Euclidiano] (X, Y, Z) ⇒ (X/W, Y/W, Z/W, W) [Homogêneo]</code></p>
+
+<p>Dessa forma nesse trabalho, representaremos os vértices dos objetos, como pontos no espaço homogêneo, e usaremos inicialmente 'W=1' para simplificar, desse forma: <code>[Euclidiano] (X, Y, Z) ⇒ (X, Y, Z, 1) [Homogêneo]</code></p>
 
 <p>Então basicamente aplicaremos um conjunto de transformações, que levará o objeto entre os seguintes espaços:</p>
 
@@ -49,6 +50,17 @@ Dessa forma nesse trabalho, representaremos os vértices dos objetos, como ponto
 <p><img src="https://soaresgabriel.github.io/PipelineICG/images/objecttouniverse.png" alt="Levando objetos para o Espaço do Universo"></p>
 
 <p>A transformação do espaço do Objeto para o Universo, se da simplesmente com transformações geométricas nos objetos, no exemplo acima, os dois objetos sofreram uma translação. Nos focaremos nas transformações mais fundamentais: Escala, Rotação e Translação, pois outras transformações podem ser obtidas como combinações dessas.</p>
+
+<h2>
+<a id="escala" class="anchor" href="#escala" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Escala</h2>
+
+<p>A escala é simplesmente a mudança no tamanho do objeto, podemos alterar o tamanho do objeto igualmente entre todos os eixos (Escala Isotrópica), ou aplicar escalas diferentes para alguns eixos (Escala Anisotrópica), dessa forma, deformando o objeto.</p>
+
+<p>Sendo Sx, Sy e Sz, os fatores de escala para cada eixo, basicamente o que queremos é transformar o objeto da seguinte forma(Já usando a coordenada homogênea):</p>
+
+<p><code>(X, Y, Z, 1) ⇒ (Sx*X, Sy*Y, Sz*Z, 1)</code></p>
+
+<p>Podemos obter esse resultado multiplicando o vértice no formato Vetor Coluna, com a seguinte matriz:</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SoaresGabriel/PipelineICG">Pipeline ICG</a> is maintained by <a href="https://github.com/SoaresGabriel">SoaresGabriel</a>.</span>
