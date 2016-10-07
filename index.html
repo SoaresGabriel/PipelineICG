@@ -28,6 +28,13 @@
 
 <p>Além das ferramentas já usadas no primeiro trabalho, será usada também um objLoader (já disponibilizado pelo professor) para que possamos carregar o objeto a partir de um arquivo .obj, que descreve vértices e triângulos que compõe o objeto, e também será utilizado a biblioteca Eigen, para possibilitar operações entre matrizes e vetores.</p>
 
+<h3>
+<a id="espaço-homogêneo" class="anchor" href="#espa%C3%A7o-homog%C3%AAneo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Espaço Homogêneo</h3>
+
+<p>Faremos uso do Espaço Homogêneo nesse trabalho, veremos que ele possibilita a resolução de alguns problemas relacionado as transformações. Podemos derivar um Espaço Homogêneo, adicionando uma coordenada 'w' a pontos do espaço Euclidiano, chamamos essa de Coordenada Homogênea, dessa forma, um ponto no Espaço Euclidiano tem infinitos representantes no Espaço Homogêneo da seguinte forma:
+<code>[Euclidiano] (x, y, z) ⇒ (x/w, y/w, z/w, w) [Homogêneo]</code>
+Dessa forma nesse trabalho, representaremos os vértices dos objetos, como pontos no espaço homogêneo, e usaremos inicialmente 'w=1' para simplificar, desse forma: <a href="x,%20y,%20z">Euclidiano</a> ⇒ (x, y, z, 1) [Homogêneo]</p>
+
 <p>Então basicamente aplicaremos um conjunto de transformações, que levará o objeto entre os seguintes espaços:</p>
 
 <p><img src="https://soaresgabriel.github.io/PipelineICG/images/pipelinespaces.png" alt="Passos do Pipeline"></p>
