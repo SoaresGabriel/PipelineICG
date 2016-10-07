@@ -56,11 +56,15 @@
 
 <p>A escala é simplesmente a mudança no tamanho do objeto, podemos alterar o tamanho do objeto igualmente entre todos os eixos (Escala Isotrópica), ou aplicar escalas diferentes para alguns eixos (Escala Anisotrópica), dessa forma, deformando o objeto.</p>
 
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/Scales.png" alt="Escalas"></p>
+
 <p>Sendo Sx, Sy e Sz, os fatores de escala para cada eixo, basicamente o que queremos é transformar o objeto da seguinte forma(Já usando a coordenada homogênea):</p>
 
 <p><code>(X, Y, Z, 1) ⇒ (Sx*X, Sy*Y, Sz*Z, 1)</code></p>
 
-<p>Podemos obter esse resultado multiplicando o vértice no formato Vetor Coluna, com a seguinte matriz:</p>
+<p>Podemos obter esse resultado multiplicando o vértice no formato Vetor Coluna, pela Matriz de Escala, da seguinte forma:</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/ScaleOperation.png" alt="Matriz de Escala"></p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SoaresGabriel/PipelineICG">Pipeline ICG</a> is maintained by <a href="https://github.com/SoaresGabriel">SoaresGabriel</a>.</span>
