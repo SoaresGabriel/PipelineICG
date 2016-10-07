@@ -30,13 +30,18 @@
 
 <p>Então basicamente aplicaremos um conjunto de transformações, que levará o objeto entre os seguintes espaços:</p>
 
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/pipelinespaces.png" alt="Passos do Pipeline"></p>
+
 <p>Como já mencionado, temos um arquivo .obj que contem as informações do objeto em seu espaço, vamos agora ao primeiro conjunto de transformações:</p>
 
 <h1>
 <a id="espaço-do-objeto--espaço-do-universo" class="anchor" href="#espa%C3%A7o-do-objeto--espa%C3%A7o-do-universo" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Espaço do Objeto ⇒ Espaço do Universo</h1>
 
-<p>Por conveniência os objetos são descritos num sistema de coordenadas próprio, denomidado o Espaço do Objeto, dessa forma cada objeto tem seu próprio espaço. Precisamos agora levar os objetos para um espaço em comum, onde todos os objetos estarão, esse espaço é denominado o Espaço do Universo.
-A transformação do espaço do Objeto para o Universo, se da simplesmente com transformações geométricas nos objetos, nos focaremos nas transformações mais fundamentais: Escala, Rotação e Translação, pois outras transformações podem ser obtidas como combinações dessas.</p>
+<p>Por conveniência os objetos são descritos num sistema de coordenadas próprio, denomidado o Espaço do Objeto, dessa forma cada objeto tem seu próprio espaço. Precisamos agora levar os objetos para um espaço em comum, onde todos os objetos estarão, esse espaço é denominado o Espaço do Universo.</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/objecttouniverse.png" alt="Levando objetos para o Espaço do Universo"></p>
+
+<p>A transformação do espaço do Objeto para o Universo, se da simplesmente com transformações geométricas nos objetos, no exemplo acima, os dois objetos sofreram uma translação. Nos focaremos nas transformações mais fundamentais: Escala, Rotação e Translação, pois outras transformações podem ser obtidas como combinações dessas.</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SoaresGabriel/PipelineICG">Pipeline ICG</a> is maintained by <a href="https://github.com/SoaresGabriel">SoaresGabriel</a>.</span>
