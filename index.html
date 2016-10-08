@@ -104,6 +104,20 @@ Agora queremos rotacionar esse vetor a um certo ângulo θ, obtendo o vetor <cod
 
 <p>Observe como em cada caso, uma coordenada é mantida, confirmando em torno de qual eixo estamos rotacionando.</p>
 
+<h2>
+<a id="shear" class="anchor" href="#shear" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Shear</h2>
+
+<p>O Shear é uma transformação que mantem o valor de uma coordenada enquanto a outra aumenta linearmente em relação aquela coordenada. Por exemplo, se aplicarmos um Shear em um quadrado no plano, ele ficará parecendo um monte de cartas inclinado:</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/ShearTransformation.png" alt="Shear Transformation"></p>
+
+<p>Neste trabalho não foi implementado o Shear, por três razões:
+1. É pouco usado na prática.
+2. No espaço temos 6 possibilidades de Shear, o que geraria uma matriz com muitos argumentos; e o mais importante:
+3. Não é uma Transformação Fundamental, pois pode ser representada como uma combinação de escalas e rotações, como pode ser visto abaixo:</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/ShearNotFundamental.png" alt="Shear com Escala e Rotação"></p>
+
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SoaresGabriel/PipelineICG">Pipeline ICG</a> is maintained by <a href="https://github.com/SoaresGabriel">SoaresGabriel</a>.</span>
 
