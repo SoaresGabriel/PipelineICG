@@ -81,22 +81,24 @@ Agora queremos rotacionar esse vetor a um certo ângulo θ, obtendo o vetor <cod
 <p>Pelas propriedades de seno e cosseno, temos que:</p>
 
 <blockquote>
-<p>x'=r<em>cos(α+θ)=r</em>cos(α)cos(θ)−r*sin(α)sin(θ)</p>
+<p>x'= rcos(α+θ) = rcos(α)cos(θ) − rsin(α)sin(θ)</p>
 
-<p>y'=r<em>sen(α+θ)=r</em>sin(α)cos(θ)+r*cos(α)sin(θ)</p>
+<p>y'= rsen(α+θ) = rsin(α)cos(θ) + rcos(α)sin(θ)</p>
 </blockquote>
 
-<p>Substituindo <code>x=r*cos(α)</code> e <code>y=r*sen(α)</code> nas equações anterior, temos que:</p>
+<p>Substituindo <code>x=rcos(α)</code> e <code>y=rsen(α)</code> nas equações anterior, temos que:</p>
 
 <blockquote>
-<p>x'=x<em>cos(θ)−y</em>sin(θ)</p>
+<p>x'= xcos(θ) − ysin(θ)</p>
 
-<p>y'=x<em>sin(θ)+y</em>cos(θ)</p>
+<p>y'= xsin(θ) + ycos(θ)</p>
 </blockquote>
 
 <p>Dessa forma, poderíamos montar nossa matriz de rotação para esse caso, da seguinte forma:</p>
 
 <p><img src="https://soaresgabriel.github.io/PipelineICG/images/RotationMatrix2D.png" alt="Matriz de Rotação 2D"></p>
+
+<p>Já no Espaço, que é onde nos interessa, temos mais possibilidades, temos que rotacionar ao redor de algum dos eixos, podemos usar procedimento análogo ao feito acima para encontrar a Matriz de Rotação para cada caso:</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SoaresGabriel/PipelineICG">Pipeline ICG</a> is maintained by <a href="https://github.com/SoaresGabriel">SoaresGabriel</a>.</span>
