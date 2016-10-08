@@ -74,7 +74,25 @@
 <a id="rotação" class="anchor" href="#rota%C3%A7%C3%A3o" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rotação</h2>
 
 <p>Imagine um vetor w=(x,y) no plano, podemos representa-lo em coordenadas polares por <code>w=(r*cos(α), r*sen(α))</code>, onde r é a distância do ponto a origem, e α é o ângulo formado entre o vetor e o eixo x.
-Agora queremos rotacionar esse vetor a um certo ângulo θ, obtendo o vetor <code>w'=(r*cos(α+θ), r*sen(α+θ))</code>, como na imagem:</p>
+Agora queremos rotacionar esse vetor a um certo ângulo θ, obtendo o vetor <code>w'=(x', y')=(r*cos(α+θ), r*sen(α+θ))</code>, como na imagem:</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/rotatingw.png" alt="Rotacionando Vetor"></p>
+
+<p>Pelas propriedades de seno e cosseno, temos que:</p>
+
+<blockquote>
+<p>x'=r<em>cos(α+θ)=r</em>cos(α)cos(θ)−r<em>sin(α)sin(θ)
+y'=r</em>sen(α+θ)=r<em>sin(α)cos(θ)+r</em>cos(α)sin(θ)</p>
+</blockquote>
+
+<p>Substituindo <code>x=r*cos(α)</code> e <code>y=r*sen(α)</code> nas equações anterior, temos que:</p>
+
+<blockquote>
+<p>x'=x<em>cos(θ)−y</em>sin(θ)
+y'=x<em>sin(θ)+y</em>cos(θ)</p>
+</blockquote>
+
+<p>Dessa forma, poderíamos montar nossa matriz de rotação para esse caso, da seguinte forma:</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SoaresGabriel/PipelineICG">Pipeline ICG</a> is maintained by <a href="https://github.com/SoaresGabriel">SoaresGabriel</a>.</span>
