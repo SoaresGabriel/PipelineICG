@@ -118,6 +118,40 @@ Agora queremos rotacionar esse vetor a um certo ângulo θ, obtendo o vetor <cod
 
 <p><img src="https://soaresgabriel.github.io/PipelineICG/images/ShearNotFundamental.png" alt="Shear com Escala e Rotação"></p>
 
+<h2>
+<a id="translação" class="anchor" href="#transla%C3%A7%C3%A3o" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Translação</h2>
+
+<p>A translação nada mais é do que o deslocamento do objeto. Esse deslocamento pode ser feito simplesmente somando uma certa constante a coordenada dos vertices do objeto: (X,Y,Z) ⇒ (X+Dx,Y+Dy,Z+Dz).</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/Translation.png" alt="Translação"></p>
+
+<p>No Espaço não conseguiríamos representar essa transformação com uma matriz 3x3, pois o deslocamento é uma constante, e qualquer elemento da matriz estaria multiplicando uma de suas coordenadas. 
+Ai é que entra a coordenada homogênea, ao botarmos ela como 1 (na verdade pode ser qualquer valor, pois seria 'compensando' quando fizermos a divisão por w), e multiplicarmos o deslocamento por ela, estaremos apenas adicionando o próprio deslocamento que queríamos, ficando com a matriz dessa forma:</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/TranslationMatrix.png" alt="Matriz de Translação"></p>
+
+<h2>
+<a id="matriz-model" class="anchor" href="#matriz-model" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Matriz Model</h2>
+
+<p>Imagine que queremos aplicar uma escala <strong>S</strong> e depois uma rotação <strong>R</strong> em um vértice v1, originando o vértice v2.
+Primeiro aplicamos a escala <code>vt = S*v1</code> e depois a rotação <code>v2 = R*vt</code>, como multiplicação de matrizes é associativa, poderíamos fazer o seguinte:</p>
+
+<blockquote>
+<p>v2 = R<em>vt = R</em>(S<em>v1) = (R</em>S)*v1</p>
+</blockquote>
+
+<p>Dessa forma poderíamos gerar uma matriz só <code>M= R*S</code> que seria multiplicado por todos os vértices do mesmo objeto. A essa matriz damos o nome de <em>Matriz Model</em> ou Matriz de Modelagem, e é formada pela multiplicação na ordem inversa de todas as matrizes de transformação a que um objeto vai ser sujeito, e ela é a responsável por levar um objeto do Espaço do Objeto para o Espaço do Universo.</p>
+
+<p>Vale observar que a ordem das transformações geralmente importa, assim a ordem que multiplicamos as matrizes também importa e deve ser feita na ordem inversa a que as transformações vão ser aplicadas, como demonstrado acima. Para ilustrar, imagine duas matrizes de modelagem: <code>M1= T*R</code> onde é aplicada primeiro uma rotação e depois uma translação e <code>M2= R*T</code> onde as mesmas transformações são aplicadas na ordem inversa, poderíamos ter os seguintes resultados:</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/TransformationOrder.png" alt="Ordem de Transformação"></p>
+
+<h2>
+<a id="implementação" class="anchor" href="#implementa%C3%A7%C3%A3o" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Implementação</h2>
+
+<p>Dessa forma foi implementada a matriz de Modelagem, o seu conteúdo inicial é a matriz identidade (sem transformações), e ao chamarmos uma função de alguma transformação, a matriz de modelagem é multiplicada pela esquerda pela matriz da transformação, gerando a nova matriz de modelagem que aplicará as transformações na ordem em que forem chamadas.
+O estado da matriz de modelagem é guardado entre os frames, de forma que se quisermos "zera-la" temos que chamar uma função especifica que carrega a matriz identidade novamente nela.</p>
+
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SoaresGabriel/PipelineICG">Pipeline ICG</a> is maintained by <a href="https://github.com/SoaresGabriel">SoaresGabriel</a>.</span>
 
