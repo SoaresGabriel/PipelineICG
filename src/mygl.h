@@ -3,9 +3,12 @@
 
 #include "math.h"
 #include "definitions.h"
+#include "objLoader.h"
 #include "transformations.h"
 
 #define OBJ "monkey_head2.obj"
+
+objLoader *objData;
 
 typedef struct Color {
 	unsigned char R;
@@ -43,6 +46,9 @@ unsigned int getMemoryAdress(Pixel p) {
 }
 
 void putPixel(Pixel p) {
+	if(p.x < 0 || p.x >= IMAGE_WIDTH || p.y < 0 || p.y >= IMAGE_HEIGHT)
+		return;
+
 	unsigned int adress = getMemoryAdress(p);
 
 	FBptr[adress] = p.color.R;
@@ -158,6 +164,69 @@ void drawTriangle(Triangle t) {
 	drawLine(line2);
 	drawLine(line3);
 
+}
+
+void drawObj() {
+
+	Matrix4f MODELVIEWPROJECTION;
+	MODELVIEWPROJECTION = PROJECTION*VIEW*MODEL;
+
+	Color color = {255,255,255,255};
+
+	// CARREGA TRIANGULOS VERTICE A VERTICE
+	for (int i = 0; i < objData->faceCount; i++) {
+		obj_face *o = objData->faceList[i];
+
+		Vector4f v1, v2, v3;
+
+		v1(0) = objData->vertexList[o->vertex_index[0]]->e[0];
+		v1(1) = objData->vertexList[o->vertex_index[0]]->e[1];
+		v1(2) = objData->vertexList[o->vertex_index[0]]->e[2];
+		v1(3) = 1; //coordenada homogenea;
+
+		v2(0) = objData->vertexList[o->vertex_index[1]]->e[0];
+		v2(1) = objData->vertexList[o->vertex_index[1]]->e[1];
+		v2(2) = objData->vertexList[o->vertex_index[1]]->e[2];
+		v2(3) = 1;
+
+		v3(0) = objData->vertexList[o->vertex_index[2]]->e[0];
+		v3(1) = objData->vertexList[o->vertex_index[2]]->e[1];
+		v3(2) = objData->vertexList[o->vertex_index[2]]->e[2];
+		v3(3) = 1;
+
+
+		// Leva os vertices do espaço do objeto direto para o espaço de recorte
+		v1 = MODELVIEWPROJECTION * v1;
+		v2 = MODELVIEWPROJECTION * v2;
+		v3 = MODELVIEWPROJECTION * v3;
+
+		// Divisao pela coordenada homogenea, leva do espaco de recorte para o canonico
+		v1 /= v1(3);
+		v2 /= v2(3);
+		v3 /= v3(3);
+
+
+		//Leva do canonico para o espaco de tela
+		v1 = VIEWPORT * v1;
+		v2 = VIEWPORT * v2;
+		v3 = VIEWPORT * v3;
+
+		Pixel p1 = {(int) v1(0), (int) v1(1), color};
+		Pixel p2 = {(int) v2(0), (int) v2(1), color};
+		Pixel p3 = {(int) v3(0), (int) v3(1), color};
+
+		Triangle t = {p1, p2, p3};
+
+		drawTriangle(t);
+	}
+}
+
+void clearScreen(){
+	int totalBytes = IMAGE_WIDTH * IMAGE_HEIGHT * 4;
+
+	for(int i = 0; i < totalBytes; i++){
+		FBptr[i] = 0;
+	}
 }
 
 #endif // _MYGL_H_

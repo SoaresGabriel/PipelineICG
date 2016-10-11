@@ -8,13 +8,13 @@ typedef Eigen::Matrix<float, 4, 4> Matrix4f;
 typedef Eigen::Matrix<float, 4, 1> Vector4f;
 typedef Eigen::Matrix<float, 3, 1> Vector3f;
 
-Matrix4f MODEL, VIEW;
+Matrix4f MODEL, VIEW, PROJECTION, VIEWPORT;
 
-void loadIdentity(Matrix4f *m){
-	*m <<	1,0,0,0,
-			0,1,0,0,
-			0,0,1,0,
-			0,0,0,1;
+void loadIdentityModel(){
+	MODEL <<	1,0,0,0,
+				0,1,0,0,
+				0,0,1,0,
+				0,0,0,1;
 }
 
 void mScale(float sX, float sY, float sZ){
@@ -84,9 +84,9 @@ void defineCamera(Vector3f position, Vector3f lookAt, Vector3f up){
 	yCam /= yCam.norm(); // normalizar
 
 	//Agora podemos montar a matriz de Rotação para o Espaço da Camera
-	Bt <<	xCam(1), xCam(2), xCam(3), 0,
-			yCam(1), yCam(2), yCam(3), 0,
-			zCam(1), zCam(2), zCam(3), 0,
+	Bt <<	xCam(0), xCam(1), xCam(2), 0,
+			yCam(0), yCam(1), yCam(2), 0,
+			zCam(0), zCam(1), zCam(2), 0,
 			0      , 0      , 0      , 1;
 
 	// E a matriz de translação
@@ -97,6 +97,33 @@ void defineCamera(Vector3f position, Vector3f lookAt, Vector3f up){
 
 	VIEW = Bt * T;
 
+}
+
+void defineViewPlane(float d) {
+	PROJECTION << 	1, 0,   0 , 0,
+    				0, 1,   0 , 0,
+    				0, 0,   1 , d,
+    				0, 0, -1/d, 0;
+}
+
+void defineViewPort(int W, int H){
+	Matrix4f S1, T, S2;
+	S1 <<	1,  0, 0, 0,
+			0, -1, 0, 0,
+			0,  0, 1, 0,
+			0,  0, 0, 1;
+
+	T <<	1, 0, 0, 1,
+			0, 1, 0, 1,
+			0, 0, 1, 0,
+			0, 0, 0, 1;
+
+	S2 <<	(W-1)/2,    0   , 0, 0,
+		   	   0   , (H-1)/2, 0, 0,
+			   0   ,    0   , 1, 0,
+			   0   ,    0   , 0, 1;
+
+	VIEWPORT = S2 * T * S1;
 }
 
 #endif

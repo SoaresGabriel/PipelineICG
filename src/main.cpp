@@ -1,35 +1,31 @@
 #include "main.h"
-#include "objLoader.h"
+#define PI 3.1415
 
-objLoader *objData;
+float teta = 0;
 
 //-----------------------------------------------------------------------------
 void MyGlDraw(void) {
 
-	// CARREGA TRIANGULOS VERTICE A VERTICE
-	for (int i = 0; i < objData->faceCount; i++) {
-		obj_face *o = objData->faceList[i];
+	loadIdentityModel();
+	//mTranslate(0,-0.5,0);
+	//mScale(2,2,2);
+	mRotateY(teta);
+	teta = teta+0.02;
+	if(teta > 2*3.1415)
+		teta -= 2*3.1415;
 
-		Vector4f v1, v2, v3;
+	Vector3f camPosition(0,0,4),
+				camLookAt(0,0,0),
+				camUp(0,1,0);
 
-		v1(0) = objData->vertexList[o->vertex_index[0]]->e[0];
-		v1(1) = objData->vertexList[o->vertex_index[0]]->e[1];
-		v1(2) = objData->vertexList[o->vertex_index[0]]->e[2];
-		v1(3) = 1; //coordenada homogenea;
+	defineCamera(camPosition, camLookAt, camUp);
 
-		v2(0) = objData->vertexList[o->vertex_index[1]]->e[0];
-		v2(1) = objData->vertexList[o->vertex_index[1]]->e[1];
-		v2(2) = objData->vertexList[o->vertex_index[1]]->e[2];
-		v2(3) = 1;
+	defineViewPlane(2);
 
-		v3(0) = objData->vertexList[o->vertex_index[2]]->e[0];
-		v3(1) = objData->vertexList[o->vertex_index[2]]->e[1];
-		v3(2) = objData->vertexList[o->vertex_index[2]]->e[2];
-		v3(3) = 1;
+	defineViewPort(IMAGE_WIDTH, IMAGE_HEIGHT);
 
-	}
-
-
+	clearScreen();
+	drawObj();
 
 }
 
@@ -46,7 +42,9 @@ int main(int argc, char **argv) {
 	// Carrega Objeto
 	objData = new objLoader();
 	char *obj = (char *) malloc(sizeof(char) * (strlen(OBJ) + 1));
+	strcpy(obj, OBJ);
 	objData->load(obj);
+	loadIdentityModel();
 
 	// Inicializações.
 	InitOpenGL(&argc, argv);
