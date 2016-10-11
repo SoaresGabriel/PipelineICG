@@ -153,19 +153,34 @@ Primeiro aplicamos a escala <code>vt = S*v1</code> e depois a rotação <code>v2
 O estado da matriz de modelagem é guardado entre os frames, de forma que se quisermos "zera-la" temos que chamar uma função especifica que carrega a matriz identidade novamente nela.</p>
 
 <h1>
-<a id="espaço-do-universo--espaço-de-tela" class="anchor" href="#espa%C3%A7o-do-universo--espa%C3%A7o-de-tela" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Espaço do Universo ⇒ Espaço de Tela</h1>
+<a id="espaço-do-universo--espaço-da-câmera" class="anchor" href="#espa%C3%A7o-do-universo--espa%C3%A7o-da-c%C3%A2mera" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Espaço do Universo ⇒ Espaço da Câmera</h1>
 
 <p>Para levar do espaço do universo para a câmera, mudaremos apenas a base do sistema de coordenadas. Primeiro definimos a câmera com alguns parâmetros, depois calculamos uma nova base de forma que a câmera fique na origem e olhando para a parte negativa do eixo z.</p>
 
 <p><img src="https://soaresgabriel.github.io/PipelineICG/images/UniverseToCamera.png" alt="Mudando base do universo para câmera"></p>
 
-<p>Neste trabalho, definiremos a câmera usando um ponto que será a posição ('p') da câmera, um ponto que indica para onde a câmera está olhando (lookAt 'l') e um vetor que indica a parte de cima da cena (vetor 'u'), para que a câmera não fique de cabeça para baixo por exemplo. Com a posição da câmera e o lookAt, podemos calcular o vetor da direção ao qual a câmera está olhando: d= l-p.
-Como queremos que a câmera olhe para o z negativo, o z da câmera (Zc) pode ser o vetor de sentido contrário ao vetor direção. Queremos ainda que a base será ortonormal (veremos depois uma vantagem), então normalizaremos (dividimos as coordenadas pelo modulo do próprio vetor, para que se origine um vetor de mesmo sentido, mas de modulo 1) todos os vetores da base.
-O vetor up, está no plano ZY da câmera, portanto um vetor que será perpendicular ao plano ZU (U=up), será perpendicular a z e a y, portanto podemos encontrar o Xc da câmera fazendo o produto vetorial 'Zc x U' (nesta ordem para um sistema de mão direita), e normalizamos.
-Agora o eixo Yc pode ser obtido da mesma forma fazendo o produto vetorial 'Zc x Xc' e normalizamos.
+<p>Neste trabalho, definiremos a câmera usando um ponto que será a posição ('p') da câmera, um ponto que indica para onde a câmera está olhando (lookAt 'l') e um vetor que indica a parte de cima da cena (vetor 'u'), para que a câmera não fique de cabeça para baixo por exemplo. Com a posição da câmera e o lookAt, podemos calcular o vetor da direção ao qual a câmera está olhando: d= l-p.</p>
+
+<p>Como queremos que a câmera olhe para o z negativo, o z da câmera (Zc) pode ser o vetor de sentido contrário ao vetor direção. Queremos ainda que a base será ortonormal (veremos depois uma vantagem), então normalizaremos (dividimos as coordenadas pelo modulo do próprio vetor, para que se origine um vetor de mesmo sentido, mas de modulo 1) todos os vetores da base.</p>
+
+<p>O vetor up, está no plano ZY da câmera, portanto um vetor que será perpendicular ao plano ZU (U=up), será perpendicular a z e a y, portanto podemos encontrar o Xc da câmera fazendo o produto vetorial 'Zc x U' (nesta ordem para um sistema de mão direita), e normalizamos.</p>
+
+<p>Agora o eixo Yc pode ser obtido da mesma forma fazendo o produto vetorial 'Zc x Xc' e normalizamos.
 Dessa forma ficamos com o seguinte: </p>
 
 <p><img src="https://soaresgabriel.github.io/PipelineICG/images/CameraBase.png" alt="Base da Câmera"></p>
+
+<p>Dessa forma, podemos montar uma matriz B cujas colunas são os vetores da base da câmera, que seria a matriz que transformaria da câmera para o universo. Como queremos a transformação inversa, temos que calcular a matriz inversa. Mas como a matriz B é ortonormal, por ser formada por vetores ortonormais, então podemos calcular a inversa simplesmente transpondo B, e essa matriz transforma do espaço do universo para a câmera.</p>
+
+<p>Mas essa matriz que montamos, leva apenas em consideração a rotação dos sistemas de coordenadas, nos casos que as origens são diferentes, precisamos ainda fazer uma translação. Essa translação é simples, basta transladar os objetos referente a posição da câmera, que será a nova origem, dai podemos montar uma matriz T de translação.</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/ViewMatrixs.png" alt="Matrizes de Rotação e Translação da Câmera"></p>
+
+<h2>
+<a id="matriz-view" class="anchor" href="#matriz-view" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Matriz View</h2>
+
+<p>Aplicando a mesma lógica que fizemos com a matriz Model, definiremos a matriz View como sendo a combinação da translação e depois da rotação <code>VIEW=Bt*T</code>. Dessa forma a matriz VIEW leva os objetos do espaço do universo para o espaço da câmera.
+Dessa forma foi implementada uma função "defineCamera" que recebe a posição da câmera, o lookAt e o up, e já calcula a matriz View.</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SoaresGabriel/PipelineICG">Pipeline ICG</a> is maintained by <a href="https://github.com/SoaresGabriel">SoaresGabriel</a>.</span>
