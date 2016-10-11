@@ -182,6 +182,49 @@ Dessa forma ficamos com o seguinte: </p>
 <p>Aplicando a mesma lógica que fizemos com a matriz Model, definiremos a matriz View como sendo a combinação da translação e depois da rotação <code>VIEW=Bt*T</code>. Dessa forma a matriz VIEW leva os objetos do espaço do universo para o espaço da câmera.
 Assim foi implementada uma função "defineCamera" que recebe a posição da câmera, o lookAt e o up, e já calcula a matriz View.</p>
 
+<p>Espaço da Câmera ⇒ Espaço de Recorte
+Basicamente o que faremos aqui, é aplicar uma distorção perspectiva nos objetos, de forma que objetos mais longes, pareçam menores do que objetos mais pertos. A matriz que desenvolveremos é uma mais simples, que leva em consideração o View Plane, como veremos.</p>
+
+<p>Primeiro deslocamos a câmera uma distância 'd' para o eixo positivo z, o que podemos fazer através dessa matriz:</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/CameraTransMatrix.png" alt="Matriz de Translação para a Câmera"></p>
+
+<p>Criaremos um view plano no eixo y, e projetamos os vértices do objeto contra esse view plane em relação a posição da câmera, de forma que obtemos uma nova altura para o objeto:</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/PerspProjection.png" alt="Projeção no View Plane"></p>
+
+<p>De semelhança de triângulos, vem que:</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/PerspectiveY.png" alt=""></p>
+
+<p>Aplicamos procedimento semelhante na coordenada X, e para o Z, também dividiremos pelo mesmo fator, embora não fosse exatamente o que queríamos, não teremos problema, pois essa divisão não mudará a ordem dos vértices em relação ao eixo Z, e dessa forma, poderemos gerar a mesma imagem final sem problemas. Assim ficamos com: </p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/PerspProjCoord.png" alt=""></p>
+
+<p>Como as três coordenadas tem um fator em comum, podemos representar esse novo ponto no espaço homogêneo, apenas mudando a coordenada homogênea para esse fator em comum, pois ao transformar este ponto para o espaço euclidiano, dividiremos as coordenadas pela coordenada homogênea.</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/ProjVertex.png" alt=""></p>
+
+<p>Assim, podemos montar uma matriz que muda a coordenada homogênea para esse fator:</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/PerspMatrix.png" alt=""></p>
+
+<h2>
+<a id="matriz-projection" class="anchor" href="#matriz-projection" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Matriz Projection</h2>
+
+<p>Agora montamos nossa matriz projection, que é a matriz que leva do espaço da câmera para o espaço de recorte, e é formada pela translação, com a distorção que desenvolvemos, ficando com:</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/ProjectionMatrix.png" alt="Matriz Projection"></p>
+
+<p>Dessa forma, foi implementada uma função que recebe o parâmetro 'd' e já calcula a Matriz Projection. Vale ressaltar que o parâmetro d vai definir o quanto de distorção perspectiva nossa cena terá.</p>
+
+<h2>
+<a id="espaço-de-recorte--espaço-canônico" class="anchor" href="#espa%C3%A7o-de-recorte--espa%C3%A7o-can%C3%B4nico" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Espaço de Recorte ⇒ Espaço Canônico</h2>
+
+<p>O espaço canônico será o espaço em que toda a cena visível estaria dentro de um cubo que vai de (-1,-1,-1) a (1,1,1), mas como desenvolvemos uma matriz mais simples, não temos essa garantia, por tanto o espaço canônico no escopo desse trabalho não é bem canônico, mas será o suficiente para nós.</p>
+
+<p>Quando transformamos do espaço da câmera para o espaço de recorte, basicamente aplicamos uma translação nos vértices e mudamos a coordenada homogênea para um fator ao qual as coordenadas deveriam serem posteriormente divididas. Então a transformação do espaço de recorte para o espaço canônico, é apenas isso, pegamos cada vértice e dividimos por sua coordenada homogênea W, voltando a um ponto da forma (X,Y,Z,1), onde (X,Y,Z) serão os vértices novamente no espaço euclidiano.</p>
+
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SoaresGabriel/PipelineICG">Pipeline ICG</a> is maintained by <a href="https://github.com/SoaresGabriel">SoaresGabriel</a>.</span>
 
