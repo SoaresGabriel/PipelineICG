@@ -225,6 +225,30 @@ Basicamente o que faremos aqui, é aplicar uma distorção perspectiva nos objet
 
 <p>Quando transformamos do espaço da câmera para o espaço de recorte, basicamente aplicamos uma translação nos vértices e mudamos a coordenada homogênea para um fator ao qual as coordenadas deveriam serem posteriormente divididas. Então a transformação do espaço de recorte para o espaço canônico, é apenas isso, pegamos cada vértice e dividimos por sua coordenada homogênea W, voltando a um ponto da forma (X,Y,Z,1), onde (X,Y,Z) serão os vértices novamente no espaço euclidiano.</p>
 
+<h2>
+<a id="espaço-canônico--espaço-de-tela" class="anchor" href="#espa%C3%A7o-can%C3%B4nico--espa%C3%A7o-de-tela" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Espaço Canônico ⇒ Espaço de Tela</h2>
+
+<p>Agora levaremos nossa cena para o espaço de tela, onde as coordenadas corresponderão a pixeis na tela de visualização.
+Como falado acima, no espaço canônico ideal, nossa cena estaria em um cubo que vai de (-1,-1,-1) a (1,1,1). Nossa câmera está no eixo z olhando para lado negativo do eixo, então é como se nós projetamos nossa cena em um certo plano XY, já que nosso espaço de tela é bidimensional, dessa forma manipularemos as coordenadas XY dos vértices, para que correspondam as coordenadas no espaço de tela.
+O primeira coisa que observamos é que na tela, o eixo Y cresce para baixo, por isso a primeira coisa que fazemos é espelhar o eixo Y, o que pode ser feito aplicando uma escala de -1:</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/S1Matrix.png" alt=""></p>
+
+<p>Nosso espaço de tela também não tem coordenadas negativas, então podemos aplicar uma translação de 1 em x e em y, para que nossa cena fique no intervalo (0,0) à (2,2) (considerando apenas XY).</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/TMatrix.png" alt=""></p>
+
+<p>Sendo W a largura da tela e H a altura da tela, temos que nosso espaço de tela vai de (0,0) à (W-1, H-1), então aplicamos uma escala de (W-1)/2 em X e (H-1)/2 em Y, para que nossa cena fique nesse intervalo.</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/S2Matrix.png" alt=""></p>
+
+<p>Como nosso espaço de tela tem apenas coordenadas inteiras, depois disso, basta arredondarmos as coordenadas dos vértices, para obter uma aproximação no espaço de tela.</p>
+
+<h2>
+<a id="matriz-viewport" class="anchor" href="#matriz-viewport" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Matriz ViewPort</h2>
+
+<p>Agora montamos nossa matriz ViewPort como a combinação das transformações anteriores <code>ViewPort= S2*T*S1</code>, e ela quem leva do espaço canônico para o espaço de tela. Então foi implementada uma função que recebe a largura e a altura da janela de visualização e calcula a matriz ViewPort.</p>
+
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SoaresGabriel/PipelineICG">Pipeline ICG</a> is maintained by <a href="https://github.com/SoaresGabriel">SoaresGabriel</a>.</span>
 
