@@ -249,6 +249,19 @@ O primeira coisa que observamos é que na tela, o eixo Y cresce para baixo, por 
 
 <p>Agora montamos nossa matriz ViewPort como a combinação das transformações anteriores <code>ViewPort= S2*T*S1</code>, e ela quem leva do espaço canônico para o espaço de tela. Então foi implementada uma função que recebe a largura e a altura da janela de visualização e calcula a matriz ViewPort.</p>
 
+<h1>
+<a id="implementação-1" class="anchor" href="#implementa%C3%A7%C3%A3o-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Implementação</h1>
+
+<p>Agora temos já implementadas nossas matrizes que levam por cada espaço do pipeline, foram desenvolvidas funções que calculam essas matrizes, conforme foi falado ao longo desse post.</p>
+
+<p>A ideia como falado anteriormente é combinar as matrizes para que posteriormente, para que possamos multiplicar nossos vértices por uma matriz só que faça diversas transformações, diminuindo assim o número total de operações.</p>
+
+<p>Então quando vamos desenhar um objeto no nosso programa, após gerarmos cada matriz nos procedimentos falados nos outros tópicos, faremos o seguinte: Primeiro vamos gerar a matriz <code>MODELVIEWPROJECTION= PROJECTION*VIEW*MODEL</code> essa matriz levará nossos vértices do espaço do objeto, direto para o espaço de recorte, depois dividimos cada vértice por sua coordenada homogênea W, para levarmos os vértices do espaço de recorte para o espaço canônico, e por último multiplicamos os vértices pela matriz VIEWPORT, para levarmos do espaço canônico para o espaço de tela.</p>
+
+<p>Conforme falado pelo Prof. Christian, e confirmado no meu teste, podemos deixar a divisão por W para o final que o resultado será idêntico, dessa forma geramos a matriz <code>MVPV = VIEWPORT*PROJECTION*VIEW*MODEL</code>, então multiplicamos nossos vértices por essa matriz e depois fazemos a divisão por W, diminuindo mais ainda o número de operações e obtendo o mesmo resultado.</p>
+
+<p>Com o objLoader, carregamos um triângulo por vez (3 vértices), aplicamos as transformações acima nos 3 vértices, agora para cada vértice geramos um struct Pixel (implementado no trabalho 1), onde as coordenadas são as mesmas de cada vértice após nós arredondarmos, e desses 3 structs Pixel's nós geramos um struct Triangle (trabalho anterior), e chamamos a função drawTriangle, que também foi implementada no trabalho anterior, para desenhar esse triângulo na tela. Após desenharmos todos os triângulos, já devemos ter nosso objeto desenhado na tela.</p>
+
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SoaresGabriel/PipelineICG">Pipeline ICG</a> is maintained by <a href="https://github.com/SoaresGabriel">SoaresGabriel</a>.</span>
 
