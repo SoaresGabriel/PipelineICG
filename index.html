@@ -228,39 +228,64 @@ Basicamente o que faremos aqui, é aplicar uma distorção perspectiva nos objet
 <h2>
 <a id="espaço-canônico--espaço-de-tela" class="anchor" href="#espa%C3%A7o-can%C3%B4nico--espa%C3%A7o-de-tela" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Espaço Canônico ⇒ Espaço de Tela</h2>
 
-<p>Agora levaremos nossa cena para o espaço de tela, onde as coordenadas corresponderão a pixeis na tela de visualização.
-Como falado acima, no espaço canônico ideal, nossa cena estaria em um cubo que vai de (-1,-1,-1) a (1,1,1). Nossa câmera está no eixo z olhando para lado negativo do eixo, então é como se nós projetamos nossa cena em um certo plano XY, já que nosso espaço de tela é bidimensional, dessa forma manipularemos as coordenadas XY dos vértices, para que correspondam as coordenadas no espaço de tela.
+<p>Agora a cena será levada ao espaço de tela, onde as coordenadas corresponderão a pixeis na tela de visualização.
+Como falado acima, no espaço canônico ideal, a cena estaria em um cubo que vai de (-1,-1,-1) a (1,1,1). A câmera está no eixo z olhando para lado negativo do eixo, então é como se projetássemos a cena em um certo plano XY, já que o espaço de tela é bidimensional, dessa forma será manipulada as coordenadas XY dos vértices, para que correspondam as coordenadas no espaço de tela.
 O primeira coisa que observamos é que na tela, o eixo Y cresce para baixo, por isso a primeira coisa que fazemos é espelhar o eixo Y, o que pode ser feito aplicando uma escala de -1:</p>
 
 <p><img src="https://soaresgabriel.github.io/PipelineICG/images/S1Matrix.png" alt=""></p>
 
-<p>Nosso espaço de tela também não tem coordenadas negativas, então podemos aplicar uma translação de 1 em x e em y, para que nossa cena fique no intervalo (0,0) à (2,2) (considerando apenas XY).</p>
+<p>O espaço de tela também não tem coordenadas negativas, então podem-se aplicar uma translação de 1 em x e em y, para que a cena fique no intervalo (0,0) à (2,2) (considerando apenas XY).</p>
 
 <p><img src="https://soaresgabriel.github.io/PipelineICG/images/TMatrix.png" alt=""></p>
 
-<p>Sendo W a largura da tela e H a altura da tela, temos que nosso espaço de tela vai de (0,0) à (W-1, H-1), então aplicamos uma escala de (W-1)/2 em X e (H-1)/2 em Y, para que nossa cena fique nesse intervalo.</p>
+<p>Sendo W a largura da tela e H a altura da tela, então o espaço de tela vai de (0,0) à (W-1, H-1), então aplica-se uma escala de (W-1)/2 em X e (H-1)/2 em Y, para que a cena fique nesse intervalo.</p>
 
 <p><img src="https://soaresgabriel.github.io/PipelineICG/images/S2Matrix.png" alt=""></p>
 
-<p>Como nosso espaço de tela tem apenas coordenadas inteiras, depois disso, basta arredondarmos as coordenadas dos vértices, para obter uma aproximação no espaço de tela.</p>
+<p>Como o espaço de tela tem apenas coordenadas inteiras, depois disso, basta arredondar as coordenadas dos vértices, para obter uma aproximação no espaço de tela.</p>
 
 <h2>
 <a id="matriz-viewport" class="anchor" href="#matriz-viewport" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Matriz ViewPort</h2>
 
-<p>Agora montamos nossa matriz ViewPort como a combinação das transformações anteriores <code>ViewPort= S2*T*S1</code>, e ela quem leva do espaço canônico para o espaço de tela. Então foi implementada uma função que recebe a largura e a altura da janela de visualização e calcula a matriz ViewPort.</p>
+<p>Agora pode-se montar a matriz ViewPort como a combinação das transformações anteriores <code>ViewPort= S2*T*S1</code>, e ela quem leva do espaço canônico para o espaço de tela. Então foi implementada uma função que recebe a largura e a altura da janela de visualização e calcula a matriz ViewPort.</p>
 
 <h1>
 <a id="implementação-1" class="anchor" href="#implementa%C3%A7%C3%A3o-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Implementação</h1>
 
-<p>Agora temos já implementadas nossas matrizes que levam por cada espaço do pipeline, foram desenvolvidas funções que calculam essas matrizes, conforme foi falado ao longo desse post.</p>
+<p>Agora já foram implementadas as matrizes que levam por cada espaço do pipeline, foram desenvolvidas funções que calculam essas matrizes, conforme foi falado ao longo desse post.</p>
 
-<p>A ideia como falado anteriormente é combinar as matrizes para que posteriormente, para que possamos multiplicar nossos vértices por uma matriz só que faça diversas transformações, diminuindo assim o número total de operações.</p>
+<p>A ideia como falado anteriormente é combinar as matrizes para que posteriormente, para que seja possível multiplicar nossos vértices por uma matriz só que faça todas as transformações necessárias, diminuindo assim o número total de operações.</p>
 
-<p>Então quando vamos desenhar um objeto no nosso programa, após gerarmos cada matriz nos procedimentos falados nos outros tópicos, faremos o seguinte: Primeiro vamos gerar a matriz <code>MODELVIEWPROJECTION= PROJECTION*VIEW*MODEL</code> essa matriz levará nossos vértices do espaço do objeto, direto para o espaço de recorte, depois dividimos cada vértice por sua coordenada homogênea W, para levarmos os vértices do espaço de recorte para o espaço canônico, e por último multiplicamos os vértices pela matriz VIEWPORT, para levarmos do espaço canônico para o espaço de tela.</p>
+<p>Então quando for desenhar um objeto, após ser gerada cada matriz nos procedimentos falados nos outros tópicos, será feito o seguinte: Primeiro gera-se a matriz <code>MODELVIEWPROJECTION= PROJECTION*VIEW*MODEL</code> essa matriz levará os vértices do espaço do objeto, direto para o espaço de recorte, depois divide-se cada vértice por sua coordenada homogênea W, para levar os vértices do espaço de recorte para o espaço canônico, e por último multiplica-se os vértices pela matriz VIEWPORT, para levar do espaço canônico para o espaço de tela.</p>
 
-<p>Conforme falado pelo Prof. Christian, e confirmado em testes, podemos deixar a divisão por W para o final que o resultado será idêntico, dessa forma geramos a matriz <code>MVPV = VIEWPORT*PROJECTION*VIEW*MODEL</code>, então multiplicamos nossos vértices por essa matriz e depois fazemos a divisão por W, diminuindo mais ainda o número de operações e obtendo o mesmo resultado.</p>
+<p>Conforme falado pelo Prof. Christian, e confirmado em testes, pode-se deixar a divisão por W para o final que o resultado será idêntico, dessa forma pode-se gerar a matriz <code>MVPV = VIEWPORT*PROJECTION*VIEW*MODEL</code>, então multiplica-se os vértices por essa matriz e depois se faz a divisão por W, diminuindo mais ainda o número de operações e obtendo o mesmo resultado.</p>
 
-<p>Com o objLoader, carregamos um triângulo por vez (3 vértices), aplicamos as transformações acima nos 3 vértices, agora para cada vértice geramos um struct Pixel (implementado no trabalho 1), onde as coordenadas são as mesmas de cada vértice após nós arredondarmos, e desses 3 structs Pixel's nós geramos um struct Triangle (trabalho anterior), e chamamos a função drawTriangle, que também foi implementada no trabalho anterior, para desenhar esse triângulo na tela. Após desenharmos todos os triângulos, já devemos ter nosso objeto desenhado na tela.</p>
+<p>Com o objLoader, é carregado um triângulo por vez (3 vértices), aplicado as transformações acima nos 3 vértices, depois para cada vértice, é gerado um struct Pixel (implementado no trabalho 1), onde as coordenadas são as mesmas coordenadas XY de cada vértice após serem truncadas, e desses 3 structs Pixel's é gerado um struct Triangle (trabalho anterior), e é chamada a função drawTriangle, que também foi implementada no trabalho anterior, para desenhar esse triângulo na tela. Após todos os triângulos serem desenhados, o objeto já deve aparecer corretamente na tela.</p>
+
+<h1>
+<a id="resultados" class="anchor" href="#resultados" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Resultados</h1>
+
+<p>Agora que já temos o pipeline implementado, vamos ver os resultados. Será usado o obj disponibilizado pelo prof. Christian, de forma que o resultado deva estar parecido com o resultado gerado pelo OpenGL no programa que o professor disponibilizou.</p>
+
+<p>A principio não foi aplicada nenhuma transformação no objeto em si, então a matriz model será apenas a identidade. A câmera foi posicionada em (0,0,5), com lookAt para a origem (0,0,0) e UP (0,1,0). E o parâmetro d da matriz de projeção (distancia do viewplane) foi definido para d=1.</p>
+
+<p>Abaixo temos o resultado, a direita é a imagem gerada pelo programa do professor usando OpenGL, ao qual deve se aproximar, e a direita a imagem gerada pela implementação aqui desenvolvida.</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/1result.png" alt="Primeiro Resultado"></p>
+
+<p>Então foi modificado o parâmetro d e observado que 'd=2.4' gerava a imagem com o mesmo tamanho, porém se observamos mais cuidadosamente, alguns detalhes da imagem ficaram diferentes (a seta mostra um desses detalhes). </p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/2result.png" alt="Segundo Resultado"></p>
+
+<p>Isso aconteceu porque a distorção perspectiva foi aplicada diferente entre as imagens, então foi percebido que deve-se também mudar a posição da câmera juntamente com o d, para se obter uma imagem mais aproximada. Nos testes foi percebido que a câmera na posição (0,0,4) e o d=1.92 foi o que gerou a imagem mais aproximada.</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/3result.png" alt="Terceiro Resultado"></p>
+
+<p>E agora vejamos usando alguns modelos mais elaborados: (foram aplicadas algumas transformações na model, para melhorar a visualização)</p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/eagleresult.png" alt=""></p>
+
+<p><img src="https://soaresgabriel.github.io/PipelineICG/images/pantherresult.png" alt=""></p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/SoaresGabriel/PipelineICG">Pipeline ICG</a> is maintained by <a href="https://github.com/SoaresGabriel">SoaresGabriel</a>.</span>
