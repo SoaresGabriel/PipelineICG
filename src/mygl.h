@@ -168,8 +168,8 @@ void drawTriangle(Triangle t) {
 
 void drawObj() {
 
-	Matrix4f MODELVIEWPROJECTION;
-	MODELVIEWPROJECTION = PROJECTION*VIEW*MODEL;
+	Matrix4f MVPV;
+	MVPV = VIEWPORT*PROJECTION*VIEW*MODEL;
 
 	Color color = {255,255,255,255};
 
@@ -195,21 +195,13 @@ void drawObj() {
 		v3(3) = 1;
 
 
-		// Leva os vertices do espaço do objeto direto para o espaço de recorte
-		v1 = MODELVIEWPROJECTION * v1;
-		v2 = MODELVIEWPROJECTION * v2;
-		v3 = MODELVIEWPROJECTION * v3;
+		v1 = MVPV * v1;
+		v2 = MVPV * v2;
+		v3 = MVPV * v3;
 
-		// Divisao pela coordenada homogenea, leva do espaco de recorte para o canonico
 		v1 /= v1(3);
 		v2 /= v2(3);
 		v3 /= v3(3);
-
-
-		//Leva do canonico para o espaco de tela
-		v1 = VIEWPORT * v1;
-		v2 = VIEWPORT * v2;
-		v3 = VIEWPORT * v3;
 
 		Pixel p1 = {(int) v1(0), (int) v1(1), color};
 		Pixel p2 = {(int) v2(0), (int) v2(1), color};

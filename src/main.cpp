@@ -1,26 +1,16 @@
 #include "main.h"
 #define PI 3.1415
 
-float teta = 0;
-
 //-----------------------------------------------------------------------------
 void MyGlDraw(void) {
 
-	loadIdentityModel();
-	//mTranslate(0,-0.5,0);
-	//mScale(2,2,2);
-	mRotateY(teta);
-	teta = teta+0.02;
-	if(teta > 2*3.1415)
-		teta -= 2*3.1415;
-
-	Vector3f camPosition(0,0,4),
+	Vector3f 	camPosition(0,0,4),
 				camLookAt(0,0,0),
 				camUp(0,1,0);
 
 	defineCamera(camPosition, camLookAt, camUp);
 
-	defineViewPlane(2);
+	defineViewPlane(1.92);
 
 	defineViewPort(IMAGE_WIDTH, IMAGE_HEIGHT);
 
